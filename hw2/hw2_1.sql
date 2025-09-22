@@ -90,23 +90,32 @@ INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
 
 -- segment table
 CREATE TABLE segment (
-  airline
-  flight_number
-  segment_offset
-  start_airport
-  end_airport
+  airline         CHAR(2) NOT NULL,
+  flight_number   INTEGER NOT NULL,
+  segment_offset  INTEGER NOT NULL,
+  start_airport   VARCHAR(5) NOT NULL,
+  end_airport     VARCHAR(5) NOT NULL,
+  PRIMARY KEY (airline, flight_number, segment_offset),
+  FOREIGN KEY (airline, flight_number) REFERENCES flight(airline, flight_number),
+  FOREIGN KEY (start_airport) REFERENCES airport(id),
+  FOREIGN KEY (end_airport) REFERENCES airport(id),
+  CONSTRAINT segment_diff_ck CHECK (start_airport <> end_airport),
+  CONSTRAINT segment_offset_ck CHECK (segment_offset >= 1),
+  CONSTRAINT segment_unique_leg UNIQUE (airline, flight_number, start_airport, end_airport),
 );
 
+
 INSERT INTO segment VALUES
-  (),
-  (),
-  (),
-  (),
-  ();
+  ('AS',100,1,'SEA','LAX'),
+  ('AS',101,1,'SEA','SFO'),
+  ('UA',200,1,'SFO','DEN'),
+  ('UA',200,2,'DEN','JFK'),
+  ('DL',300,1,'ATL','DEN');
 
--- FAIL:
-
--- FAIL:
+-- FAIL: invalid segment count (flights cant have 0)
+INSERT INTO segment VALUES ('UA',200,0,'SFO','DEN');
+-- FAIL: duplicate leg for same flight
+INSERT INTO segment VALUES ('AS',100,2,'SEA','LAX');
 
 -- TODO:
 --   * Fill in your name above and a brief description.
