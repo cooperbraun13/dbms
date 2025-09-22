@@ -23,20 +23,80 @@ CREATE TABLE airport (
   PRIMARY KEY (id),
   CONSTRAINT elevation_minimum CHECK (elevation >= 0),
   CONSTRAINT airport_name_city_state UNIQUE (name, city, state),
-)
+);
 
 INSERT INTO airport VALUES
-  ('SEA','Seattle-Tacoma Intl','Seattle','WA',433),
+  ('SEA','Seattle-Tacoma Intl','SeaTac','WA',433),
   ('LAX','Los Angeles Intl','Los Angeles','CA',128),
   ('SFO','San Francisco Intl','San Francisco','CA',13),
   ('DEN','Denver Intl','Denver','CO',5430),
-  ('JFK','John F. Kennedy','New York','NY',13),
+  ('JFK','John F. Kennedy','New York','NY',13);
 
 -- FAIL: same city for differing airport name/state
-
+INSERT INTO airport VALUES ('SAN','San Diego Intl','San Francisco','CA',17);
 -- FAIL: negative elevation
+INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
 
 -- airline table
+CREATE TABLE airline (
+  code
+  name
+  main_hub
+  yr_founded
+);
+
+INSERT INTO airline VALUES
+  (),
+  (),
+  (),
+  (),
+  ();
+
+-- FAIL:
+
+-- FAIL:
+
+
+-- flight table
+CREATE TABLE flight (
+  airline
+  flight_number
+  departure
+  arrival
+  flights_per_wk
+);
+
+INSERT INTO flight VALUES
+  (),
+  (),
+  (),
+  (),
+  ();
+
+-- FAIL:
+
+-- FAIL:
+
+
+-- segment table
+CREATE TABLE segment (
+  airline
+  flight_number
+  segment_offset
+  start_airport
+  end_airport
+);
+
+INSERT INTO segment VALUES
+  (),
+  (),
+  (),
+  (),
+  ();
+
+-- FAIL:
+
+-- FAIL:
 
 -- TODO:
 --   * Fill in your name above and a brief description.
