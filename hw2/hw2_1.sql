@@ -15,11 +15,11 @@ DROP TABLE IF EXISTS airport CASCADE;
 
 -- airport table
 CREATE TABLE airport (
-  id        VARCHAR(5),
-  name      VARCHAR(50) NOT NULL,
-  city      VARCHAR(50) NOT NULL,
-  state     CHAR(2) NOT NULL,
-  elevation INTEGER NOT NULL,
+  id         VARCHAR(5),
+  name       VARCHAR(50) NOT NULL,
+  city       VARCHAR(50) NOT NULL,
+  state      CHAR(2) NOT NULL,
+  elevation  INTEGER NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT elevation_minimum CHECK (elevation >= 0),
   CONSTRAINT airport_name_city_state UNIQUE (name, city, state),
@@ -39,22 +39,26 @@ INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
 
 -- airline table
 CREATE TABLE airline (
-  code
-  name
-  main_hub
-  yr_founded
+  code        CHAR(2),
+  name        VARCHAR(50) NOT NULL UNIQUE,
+  main_hub    VARCHAR(5) NOT NULL,
+  yr_founded  INTEGER NOT NULL,
+  PRIMARY KEY (code),
+  FOREIGN KEY (main_hub) REFERENCES airport(id),
+  CONSTRAINT yr_founded_after_min CHECK (yr_founded >= 1900),
 );
 
 INSERT INTO airline VALUES
-  (),
-  (),
-  (),
-  (),
-  ();
+  ('AS','Alaska Airlines','SEA',1932),
+  ('DL','Delta Air Lines','ATL',1925),
+  ('UA','United Airlines','SFO',1931),
+  ('AA','American Airlines','JFK',1926),
+  ('WN','Southwest Airlines','DEN',1966);
 
--- FAIL:
-
--- FAIL:
+-- FAIL: hub airport doesn't exist
+INSERT INTO airline VALUES ('ZZ','Ghost Airline','XXX',2000);
+-- FAIL: airline was founded after 1900
+INSERT INTO airline VALUES ('LH','Lufthansa','FRA',1895);
 
 
 -- flight table
