@@ -63,24 +63,30 @@ INSERT INTO airline VALUES ('LH','Lufthansa','FRA',1895);
 
 -- flight table
 CREATE TABLE flight (
-  airline
-  flight_number
-  departure
-  arrival
-  flights_per_wk
+  airline         CHAR(2) NOT NULL,
+  flight_number   INTEGER NOT NULL,
+  departure       VARCHAR(5) NOT NULL,
+  arrival         VARCHAR(5) NOT NULL,
+  flights_per_wk  INTEGER NOT NULL,
+  PRIMARY KEY (airline, flight_number),
+  FOREIGN KEY (airline) REFERENCES airline(code),
+  FOREIGN KEY (departure) REFERENCES airport(id),
+  FOREIGN KEY (arrival) REFERENCES airport(id),
+  CONSTRAINT flights_per_wk_positive CHECK (flights_per_wk >= 0),
+  CHECK (departure <> arrival),
 );
 
 INSERT INTO flight VALUES
-  (),
-  (),
-  (),
-  (),
-  ();
+  ('AS',100,'SEA','LAX',21),
+  ('AS',101,'SEA','SFO',14),
+  ('UA',200,'SFO','JFK',7),
+  ('DL',300,'ATL','DEN',14),
+  ('WN',400,'DEN','SEA',10);
 
--- FAIL:
-
--- FAIL:
-
+-- FAIL: same departure and arrival
+INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
+-- FAIL: flights per week are negative
+('AS',102,'SEA','FRA',-2);
 
 -- segment table
 CREATE TABLE segment (
