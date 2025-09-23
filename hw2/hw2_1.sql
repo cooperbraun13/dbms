@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS flight CASCADE;
 DROP TABLE IF EXISTS airline CASCADE;
 DROP TABLE IF EXISTS airport CASCADE;
 
--- airport table
+-- airport table: stores airports and basic location/elevation information
 CREATE TABLE airport (
   id         VARCHAR(5),
   name       VARCHAR(50) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE airport (
   elevation  INTEGER NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT elevation_minimum CHECK (elevation >= 0),
-  CONSTRAINT airport_name_city_state UNIQUE (name, city, state),
+  CONSTRAINT airport_name_city_state UNIQUE (name, city, state)
 );
 
 INSERT INTO airport VALUES
@@ -31,13 +31,14 @@ INSERT INTO airport VALUES
   ('SFO','San Francisco Intl','San Francisco','CA',13),
   ('DEN','Denver Intl','Denver','CO',5430),
   ('JFK','John F. Kennedy','New York','NY',13);
+  ('ATL','Hartsfield-Jackson Atlanta Intl','Atlanta','GA',102);
 
--- FAIL: same city for differing airport name/state
-INSERT INTO airport VALUES ('SAN','San Diego Intl','San Francisco','CA',17);
+-- FAIL: duplicate primary key
+INSERT INTO airport VALUES ('SEA','Bremerton National','SeaTac','WA',444);
 -- FAIL: negative elevation
 INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
 
--- airline table
+-- airline table: airlines with a main hub airport and founding year
 CREATE TABLE airline (
   code        CHAR(2),
   name        VARCHAR(50) NOT NULL UNIQUE,
@@ -45,7 +46,7 @@ CREATE TABLE airline (
   yr_founded  INTEGER NOT NULL,
   PRIMARY KEY (code),
   FOREIGN KEY (main_hub) REFERENCES airport(id),
-  CONSTRAINT yr_founded_after_min CHECK (yr_founded >= 1900),
+  CONSTRAINT yr_founded_after_min CHECK (yr_founded >= 1900)
 );
 
 INSERT INTO airline VALUES
@@ -57,11 +58,10 @@ INSERT INTO airline VALUES
 
 -- FAIL: hub airport doesn't exist
 INSERT INTO airline VALUES ('ZZ','Ghost Airline','XXX',2000);
--- FAIL: airline was founded after 1900
-INSERT INTO airline VALUES ('LH','Lufthansa','FRA',1895);
+-- FAIL: founding year before 1900
+INSERT INTO airline VALUES ('LH','Lufthansa','SEA',1895);
 
-
--- flight table
+-- flight table: carrier flight definition with endpoints and frequency
 CREATE TABLE flight (
   airline         CHAR(2) NOT NULL,
   flight_number   INTEGER NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE flight (
   FOREIGN KEY (departure) REFERENCES airport(id),
   FOREIGN KEY (arrival) REFERENCES airport(id),
   CONSTRAINT flights_per_wk_positive CHECK (flights_per_wk >= 0),
-  CHECK (departure <> arrival),
+  CHECK (departure <> arrival)
 );
 
 INSERT INTO flight VALUES
@@ -88,7 +88,7 @@ INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
 -- FAIL: flights per week are negative
 ('AS',102,'SEA','FRA',-2);
 
--- segment table
+-- segment table: ordered legs for each flight
 CREATE TABLE segment (
   airline         CHAR(2) NOT NULL,
   flight_number   INTEGER NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE segment (
   FOREIGN KEY (end_airport) REFERENCES airport(id),
   CONSTRAINT segment_diff_ck CHECK (start_airport <> end_airport),
   CONSTRAINT segment_offset_ck CHECK (segment_offset >= 1),
-  CONSTRAINT segment_unique_leg UNIQUE (airline, flight_number, start_airport, end_airport),
+  CONSTRAINT segment_unique_leg UNIQUE (airline, flight_number, start_airport, end_airport)
 );
 
 
@@ -112,10 +112,11 @@ INSERT INTO segment VALUES
   ('UA',200,2,'DEN','JFK'),
   ('DL',300,1,'ATL','DEN');
 
--- FAIL: invalid segment count (flights cant have 0)
-INSERT INTO segment VALUES ('UA',200,0,'SFO','DEN');
--- FAIL: duplicate leg for same flight
-INSERT INTO segment VALUES ('AS',100,2,'SEA','LAX');
+-- FAIL: same departure and arrival
+INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
+
+-- FAIL: negative flights per week
+INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);
 
 -- TODO:
 --   * Fill in your name above and a brief description.
