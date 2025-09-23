@@ -33,9 +33,9 @@ INSERT INTO airport VALUES
   ('JFK','John F. Kennedy','New York','NY',13),
   ('ATL','Hartsfield-Jackson Atlanta Intl','Atlanta','GA',102);
 
--- -- FAIL: duplicate primary key
+-- -- duplicate primary key
 -- INSERT INTO airport VALUES ('SEA','Bremerton National','SeaTac','WA',444);
--- -- FAIL: negative elevation
+-- -- negative elevation
 -- INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
 
 -- airline table: airlines with a main hub airport and founding year
@@ -56,9 +56,9 @@ INSERT INTO airline VALUES
   ('AA','American Airlines','JFK',1926),
   ('WN','Southwest Airlines','DEN',1966);
 
--- -- FAIL: hub airport doesn't exist
+-- -- hub airport doesn't exist
 -- INSERT INTO airline VALUES ('ZZ','Ghost Airline','XXX',2000);
--- -- FAIL: founding year before 1900
+-- -- founding year before 1900
 -- INSERT INTO airline VALUES ('LH','Lufthansa','SEA',1895);
 
 -- flight table: carrier flight definition with endpoints and frequency
@@ -83,9 +83,9 @@ INSERT INTO flight VALUES
   ('DL',300,'ATL','DEN',14),
   ('WN',400,'DEN','SEA',10);
 
--- -- FAIL: same departure and arrival
+-- -- same departure and arrival
 -- INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
--- -- FAIL: flights per week are negative
+-- -- flights per week are negative
 -- INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);
 
 -- segment table: ordered legs for each flight
@@ -112,7 +112,7 @@ INSERT INTO segment VALUES
   ('UA',200,2,'DEN','JFK'),
   ('DL',300,1,'ATL','DEN');
 
--- -- FAIL: same departure and arrival
+-- -- same departure and arrival
 -- INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
--- -- FAIL: negative flights per week
+-- -- negative flights per week
 -- INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);

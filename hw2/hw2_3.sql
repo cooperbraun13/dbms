@@ -258,3 +258,55 @@ INSERT INTO album_track VALUES
   ('Nirvana','Nevermind',12,1),                -- Smells Like Teen Spirit
   ('Fleetwood Mac','Rumours',13,2),            -- Dreams
   ('Daft Punk','Random Access Memories',14,8); -- Get Lucky
+
+-- music_group
+-- INSERT INTO music_group VALUES ('Radiohead',1990); -- duplicate PK
+-- INSERT INTO music_group(group_name,year_formed) VALUES ('New Group', NULL); -- NOT NULL
+
+-- genre
+-- INSERT INTO genre VALUES ('rock','dup'); -- duplicate PK
+-- INSERT INTO genre(genre_label,description) VALUES ('shoegaze', NULL); -- NOT NULL
+
+-- label
+-- INSERT INTO label VALUES ('Parlophone'); -- duplicate PK
+-- INSERT INTO album VALUES ('Radiohead','Ghost Label Album',1998,'Nonexistent'); -- FK to label fails
+
+-- musician
+-- INSERT INTO musician VALUES ('Thom','Yorke',NULL,1968); -- duplicate composite PK
+-- INSERT INTO musician(first_name,last_name) VALUES (NULL,'Nobody'); -- NOT NULL
+
+-- group_genre
+-- INSERT INTO group_genre VALUES ('Radiohead','alternative rock'); -- duplicate composite PK
+-- INSERT INTO group_genre VALUES ('Radiohead','nonexistent-genre'); -- FK to genre fails
+
+-- influence
+-- INSERT INTO influence VALUES ('Radiohead','Radiohead'); -- CHECK self-influence
+-- INSERT INTO influence VALUES ('Ghost Group','Nirvana'); -- FK to music_group fails
+
+-- membership
+-- INSERT INTO membership VALUES ('Radiohead','Thom','Yorke',1995,1990); -- CHECK end_year >= start_year
+-- INSERT INTO membership VALUES ('Radiohead','Thom','Yorke',1985,NULL); -- duplicate composite PK
+
+-- song
+-- INSERT INTO song VALUES ('Paranoid Android',2000); -- duplicate PK
+-- INSERT INTO song(title,year_written) VALUES ('Brand New', NULL); -- NOT NULL
+
+-- song_writer
+-- INSERT INTO song_writer VALUES ('Paranoid Android','Thom','Yorke'); -- duplicate composite PK
+-- INSERT INTO song_writer VALUES ('Paranoid Android','No','Body'); -- FK to musician fails
+
+-- track
+-- INSERT INTO track VALUES (10,'Get Lucky',2013); -- duplicate track_id PK
+-- INSERT INTO track VALUES (99,'Ghost Song',2001); -- FK song_title fails
+
+-- track_contributor
+-- INSERT INTO track_contributor VALUES (10,'Thom','Yorke'); -- duplicate composite PK
+-- INSERT INTO track_contributor VALUES (99,'Thom','Yorke'); -- FK to track fails
+
+-- album
+-- INSERT INTO album VALUES ('Radiohead','OK Computer',1998,'Parlophone'); -- duplicate (group_name,title)
+-- INSERT INTO album VALUES ('Nirvana','Nevermind',1991,'NoLabel'); -- FK label fails
+
+-- album_track
+-- INSERT INTO album_track VALUES ('Radiohead','OK Computer',10,2); -- duplicate composite PK
+-- INSERT INTO album_track VALUES ('Nirvana','Nevermind',12,1); -- duplicate track_number per album (UNIQUE)
