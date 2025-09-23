@@ -30,13 +30,13 @@ INSERT INTO airport VALUES
   ('LAX','Los Angeles Intl','Los Angeles','CA',128),
   ('SFO','San Francisco Intl','San Francisco','CA',13),
   ('DEN','Denver Intl','Denver','CO',5430),
-  ('JFK','John F. Kennedy','New York','NY',13);
+  ('JFK','John F. Kennedy','New York','NY',13),
   ('ATL','Hartsfield-Jackson Atlanta Intl','Atlanta','GA',102);
 
--- FAIL: duplicate primary key
-INSERT INTO airport VALUES ('SEA','Bremerton National','SeaTac','WA',444);
--- FAIL: negative elevation
-INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
+-- -- FAIL: duplicate primary key
+-- INSERT INTO airport VALUES ('SEA','Bremerton National','SeaTac','WA',444);
+-- -- FAIL: negative elevation
+-- INSERT INTO airport VALUES ('DUM','Dummy Intl','Dummy','DU',-5);
 
 -- airline table: airlines with a main hub airport and founding year
 CREATE TABLE airline (
@@ -56,10 +56,10 @@ INSERT INTO airline VALUES
   ('AA','American Airlines','JFK',1926),
   ('WN','Southwest Airlines','DEN',1966);
 
--- FAIL: hub airport doesn't exist
-INSERT INTO airline VALUES ('ZZ','Ghost Airline','XXX',2000);
--- FAIL: founding year before 1900
-INSERT INTO airline VALUES ('LH','Lufthansa','SEA',1895);
+-- -- FAIL: hub airport doesn't exist
+-- INSERT INTO airline VALUES ('ZZ','Ghost Airline','XXX',2000);
+-- -- FAIL: founding year before 1900
+-- INSERT INTO airline VALUES ('LH','Lufthansa','SEA',1895);
 
 -- flight table: carrier flight definition with endpoints and frequency
 CREATE TABLE flight (
@@ -73,7 +73,7 @@ CREATE TABLE flight (
   FOREIGN KEY (departure) REFERENCES airport(id),
   FOREIGN KEY (arrival) REFERENCES airport(id),
   CONSTRAINT flights_per_wk_positive CHECK (flights_per_wk >= 0),
-  CHECK (departure <> arrival)
+  CONSTRAINT same_airport CHECK (departure <> arrival)
 );
 
 INSERT INTO flight VALUES
@@ -83,10 +83,10 @@ INSERT INTO flight VALUES
   ('DL',300,'ATL','DEN',14),
   ('WN',400,'DEN','SEA',10);
 
--- FAIL: same departure and arrival
-INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
--- FAIL: flights per week are negative
-('AS',102,'SEA','FRA',-2);
+-- -- FAIL: same departure and arrival
+-- INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
+-- -- FAIL: flights per week are negative
+-- INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);
 
 -- segment table: ordered legs for each flight
 CREATE TABLE segment (
@@ -112,18 +112,7 @@ INSERT INTO segment VALUES
   ('UA',200,2,'DEN','JFK'),
   ('DL',300,1,'ATL','DEN');
 
--- FAIL: same departure and arrival
-INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
-
--- FAIL: negative flights per week
-INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);
-
--- TODO:
---   * Fill in your name above and a brief description.
---   * Implement the question 1 schema as per the homework instructions.
---   * Populate each table according to the homework instructions.
---   * Be sure each table has a comment describing its purpose.
---   * Be sure to add comments as needed for attributes.
---   * Be sure your SQL code is well formatted (according to the style guides).
---   * Add two INSERT statements per table that violate constraints and
---     comment these out for the final submission
+-- -- FAIL: same departure and arrival
+-- INSERT INTO flight VALUES ('AS',999,'SEA','SEA',5);
+-- -- FAIL: negative flights per week
+-- INSERT INTO flight VALUES ('AS',102,'SEA','LAX',-2);
