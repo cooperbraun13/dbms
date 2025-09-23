@@ -308,5 +308,5 @@ INSERT INTO album_track VALUES
 -- INSERT INTO album VALUES ('Nirvana','Nevermind',1991,'NoLabel'); -- FK label fails
 
 -- album_track
--- INSERT INTO album_track VALUES ('Radiohead','OK Computer',10,2); -- duplicate composite PK
--- INSERT INTO album_track VALUES ('Nirvana','Nevermind',12,1); -- duplicate track_number per album (UNIQUE)
+-- INSERT INTO album_track VALUES ('Radiohead','OK Computer',10,2);  -- duplicate composite PK
+-- INSERT INTO album_track VALUES ('Nirvana','Nevermind',10,1);      -- violates UNIQUE (same track_number in album)
