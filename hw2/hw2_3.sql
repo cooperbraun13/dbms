@@ -50,7 +50,7 @@ CREATE TABLE musician (
   last_name   VARCHAR(50) NOT NULL,
   stage_name  VARCHAR(100),
   birth_year  INTEGER,
-  PRIMARY KEY (first_name, last_name)
+  PRIMARY KEY (first_name, last_name),
   CONSTRAINT unique_stage_name UNIQUE (stage_name)
 );
 
@@ -143,3 +143,118 @@ CREATE TABLE album_track (
   CONSTRAINT unique_group_and_album UNIQUE (group_name, album_title, track_number),
   CONSTRAINT at_least_one_track CHECK (track_number >= 1)
 );
+
+-- groups
+INSERT INTO music_group VALUES
+  ('Radiohead', 1985),
+  ('Fleetwood Mac', 1967),
+  ('Nirvana', 1987),
+  ('Daft Punk', 1993);
+
+-- genres
+INSERT INTO genre VALUES
+  ('alternative rock', 'Guitar-driven alt rock styles from the 80s/90s onward'),
+  ('rock',             'Rock and roll and its subgenres'),
+  ('grunge',           'Heavier, fuzzed, punk-influenced alt rock from the PNW'),
+  ('electronic',       'Electronic dance and listening styles'),
+  ('synth-pop',        'Pop music with heavy use of synthesizers');
+
+-- labels
+INSERT INTO label VALUES
+  ('Parlophone'),
+  ('A&M'),
+  ('DGC'),
+  ('Virgin');
+
+-- musicians
+INSERT INTO musician VALUES
+  ('Thom','Yorke',       NULL, 1968),
+  ('Jonny','Greenwood',  NULL, 1971),
+  ('Lindsey','Buckingham', NULL, 1949),
+  ('Stevie','Nicks',     NULL, 1948),
+  ('Kurt','Cobain',      NULL, 1967),
+  ('Krist','Novoselic',  NULL, 1965),
+  ('Dave','Grohl',       NULL, 1969),
+  ('Thomas','Bangalter', NULL, 1975),
+  ('Guy-Manuel','de Homem-Christo', NULL, 1974);
+
+-- group_genre
+INSERT INTO group_genre VALUES
+  ('Radiohead','alternative rock'),
+  ('Fleetwood Mac','rock'),
+  ('Nirvana','grunge'),
+  ('Daft Punk','electronic'),
+  ('Daft Punk','synth-pop');
+
+-- influence
+INSERT INTO influence VALUES
+  ('Fleetwood Mac','Radiohead'),
+  ('Nirvana','Radiohead'),
+  ('Radiohead','Daft Punk');
+
+-- membership (artist in group during year ranges)
+INSERT INTO membership VALUES
+  ('Radiohead','Thom','Yorke',1985,NULL),
+  ('Radiohead','Jonny','Greenwood',1991,NULL),
+  ('Fleetwood Mac','Lindsey','Buckingham',1975,1987),
+  ('Fleetwood Mac','Stevie','Nicks',1975,1991),
+  ('Nirvana','Kurt','Cobain',1987,1994),
+  ('Nirvana','Krist','Novoselic',1987,1994),
+  ('Nirvana','Dave','Grohl',1990,1994),
+  ('Daft Punk','Thomas','Bangalter',1993,2021),
+  ('Daft Punk','Guy-Manuel','de Homem-Christo',1993,2021);
+
+-- songs (titles unique per spec)
+INSERT INTO song VALUES
+  ('Paranoid Android',1997),
+  ('Street Spirit',1995),
+  ('Smells Like Teen Spirit',1991),
+  ('Dreams',1977),
+  ('Get Lucky',2013);
+
+-- song writers (must exist as musicians)
+INSERT INTO song_writer VALUES
+  ('Paranoid Android','Thom','Yorke'),
+  ('Paranoid Android','Jonny','Greenwood'),
+  ('Street Spirit','Thom','Yorke'),
+  ('Smells Like Teen Spirit','Kurt','Cobain'),
+  ('Smells Like Teen Spirit','Krist','Novoselic'),
+  ('Smells Like Teen Spirit','Dave','Grohl'),
+  ('Dreams','Stevie','Nicks'),
+  ('Get Lucky','Thomas','Bangalter'),
+  ('Get Lucky','Guy-Manuel','de Homem-Christo');
+
+-- tracks (recorded versions of songs)
+INSERT INTO track VALUES
+  (10,'Paranoid Android',1997),
+  (11,'Street Spirit',1995),
+  (12,'Smells Like Teen Spirit',1991),
+  (13,'Dreams',1977),
+  (14,'Get Lucky',2013);
+
+-- track contributors (performers on the recording)
+INSERT INTO track_contributor VALUES
+  (10,'Thom','Yorke'),
+  (10,'Jonny','Greenwood'),
+  (11,'Thom','Yorke'),
+  (12,'Kurt','Cobain'),
+  (12,'Krist','Novoselic'),
+  (12,'Dave','Grohl'),
+  (13,'Stevie','Nicks'),
+  (14,'Thomas','Bangalter'),
+  (14,'Guy-Manuel','de Homem-Christo');
+
+-- albums (a group has at most one album with a given title)
+INSERT INTO album VALUES
+  ('Radiohead','OK Computer',1997,'Parlophone'),
+  ('Nirvana','Nevermind',1991,'DGC'),
+  ('Fleetwood Mac','Rumours',1977,'A&M'),
+  ('Daft Punk','Random Access Memories',2013,'Virgin');
+
+-- album contents (ordering per album, tracks can appear on multiple albums)
+INSERT INTO album_track VALUES
+  ('Radiohead','OK Computer',10,2),            -- Paranoid Android
+  ('Radiohead','OK Computer',11,10),           -- Street Spirit (pretend reissue/bonus)
+  ('Nirvana','Nevermind',12,1),                -- Smells Like Teen Spirit
+  ('Fleetwood Mac','Rumours',13,2),            -- Dreams
+  ('Daft Punk','Random Access Memories',14,8); -- Get Lucky
