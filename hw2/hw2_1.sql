@@ -18,8 +18,8 @@ CREATE TABLE airport (
   id         VARCHAR(5),
   name       VARCHAR(50) NOT NULL,
   city       VARCHAR(50) NOT NULL,
-  state      CHAR(2) NOT NULL,
-  elevation  INTEGER NOT NULL,
+  state      CHAR(2)     NOT NULL,
+  elevation  INTEGER     NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT elevation_minimum CHECK (elevation >= 0),
   CONSTRAINT airport_name_city_state UNIQUE (name, city, state)
@@ -42,8 +42,8 @@ INSERT INTO airport VALUES
 CREATE TABLE airline (
   code        CHAR(2),
   name        VARCHAR(50) NOT NULL UNIQUE,
-  main_hub    VARCHAR(5) NOT NULL,
-  yr_founded  INTEGER NOT NULL,
+  main_hub    VARCHAR(5)  NOT NULL,
+  yr_founded  INTEGER     NOT NULL,
   PRIMARY KEY (code),
   FOREIGN KEY (main_hub) REFERENCES airport(id),
   CONSTRAINT yr_founded_after_min CHECK (yr_founded >= 1900)
@@ -63,17 +63,17 @@ INSERT INTO airline VALUES
 
 -- flight table: carrier flight definition with endpoints and frequency
 CREATE TABLE flight (
-  airline         CHAR(2) NOT NULL,
-  flight_number   INTEGER NOT NULL,
+  airline         CHAR(2)    NOT NULL,
+  flight_number   INTEGER    NOT NULL,
   departure       VARCHAR(5) NOT NULL,
   arrival         VARCHAR(5) NOT NULL,
-  flights_per_wk  INTEGER NOT NULL,
+  flights_per_wk  INTEGER    NOT NULL,
   PRIMARY KEY (airline, flight_number),
-  FOREIGN KEY (airline) REFERENCES airline(code),
+  FOREIGN KEY (airline)   REFERENCES airline(code),
   FOREIGN KEY (departure) REFERENCES airport(id),
-  FOREIGN KEY (arrival) REFERENCES airport(id),
+  FOREIGN KEY (arrival)   REFERENCES airport(id),
   CONSTRAINT flights_per_wk_positive CHECK (flights_per_wk >= 0),
-  CONSTRAINT same_airport CHECK (departure <> arrival)
+  CONSTRAINT same_airport            CHECK (departure <> arrival)
 );
 
 INSERT INTO flight VALUES
@@ -90,16 +90,16 @@ INSERT INTO flight VALUES
 
 -- segment table: ordered legs for each flight
 CREATE TABLE segment (
-  airline         CHAR(2) NOT NULL,
-  flight_number   INTEGER NOT NULL,
-  segment_offset  INTEGER NOT NULL,
+  airline         CHAR(2)    NOT NULL,
+  flight_number   INTEGER    NOT NULL,
+  segment_offset  INTEGER    NOT NULL,
   start_airport   VARCHAR(5) NOT NULL,
   end_airport     VARCHAR(5) NOT NULL,
   PRIMARY KEY (airline, flight_number, segment_offset),
   FOREIGN KEY (airline, flight_number) REFERENCES flight(airline, flight_number),
-  FOREIGN KEY (start_airport) REFERENCES airport(id),
-  FOREIGN KEY (end_airport) REFERENCES airport(id),
-  CONSTRAINT segment_diff_ck CHECK (start_airport <> end_airport),
+  FOREIGN KEY (start_airport)          REFERENCES airport(id),
+  FOREIGN KEY (end_airport)            REFERENCES airport(id),
+  CONSTRAINT segment_diff_ck   CHECK (start_airport <> end_airport),
   CONSTRAINT segment_offset_ck CHECK (segment_offset >= 1),
   CONSTRAINT segment_unique_leg UNIQUE (airline, flight_number, start_airport, end_airport)
 );
