@@ -51,9 +51,15 @@ CREATE TABLE City (
 CREATE TABLE Border (
   country_code_1 CHAR(2),
   country_code_2 CHAR(2),
-  border_length
-  PRIMARY KEY (country_code_1, country_code_2)
+  border_length  DECIMAL(7, 2),
+  PRIMARY KEY (country_code_1, country_code_2),
+  FOREIGN KEY country_code_1 REFERENCES country(country_code),
+  FOREIGN KEY country_code_2 REFERENCES country(country_code),
+  CONSTRAINT valid_border_length CHECK (border_length >= 0),
+  CONSTRAINT border_order CHECK (country_code_1 < country_code_2) -- enforce canonical ordering to prevent (US,CA) and (CA,US) duplicates
 )
+
+-- second, insert data into the tables
 
 -- TODO:
 --   * Fill in your name above and a brief description.
