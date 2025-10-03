@@ -3,7 +3,10 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-3, Part 1
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    ... description ....
+ *  DESC:    Implements the Country/Province/City/Border schema with 
+ *           PK/FK relations and basic integrity checks. Populates 4 
+ *           countries, 4 provinces/states per country, 4 cities per 
+ *           province, and at least 2 borders to exercise constraints.
  * 
  *======================================================================*/
 
@@ -11,15 +14,15 @@
 DROP TABLE IF EXISTS City     CASCADE;
 DROP TABLE IF EXISTS Province CASCADE;
 DROP TABLE IF EXISTS Border   CASCADE;
-DROP TABLE IF EXISTS country  CASCADE;
+DROP TABLE IF EXISTS Country  CASCADE;
 
 -- first, the schemas
 
 -- countries: two-letter code, name of the country, GDP per capita (USD), inflation (%)
-CREATE TABLE country (
+CREATE TABLE Country (
   country_code CHAR(2),
   name         VARCHAR(50) NOT NULL,
-  gdp          VARCHAR(10) NOT NULL,
+  gdp          DECIMAL(12,2) NOT NULL,
   inflation    DECIMAL(5, 2) NOT NULL,
   PRIMARY KEY (country_code),
   CONSTRAINT valid_gdp CHECK (gdp >= 0),
@@ -33,19 +36,19 @@ CREATE TABLE Province (
   area          DECIMAL(10, 2) NOT NULL, -- largest province is about 1.6 million km^2
   PRIMARY KEY (province_name, country_code),
   FOREIGN KEY (country_code) REFERENCES country(country_code),
-  CONSTRAINT valid_area CHECK (area >= 0),
-)
+  CONSTRAINT valid_area CHECK (area >= 0)
+);
 
 -- cities: name of the city and the province, along with the two-letter country code, and the population of the city
 CREATE TABLE City (
   city_name     VARCHAR(50),
   province_name VARCHAR(50),  
   country_code  CHAR(2),
-  population    DECIMAL(11, 2) NOT NULL, -- largest city is about 37 million people
+  population    INTEGER NOT NULL, -- largest city is about 37 million people
   PRIMARY KEY (city_name, province_name, country_code),
   FOREIGN KEY (province_name, country_code) REFERENCES Province(province_name, country_code),
   CONSTRAINT valid_population CHECK (population >= 0)
-)
+);
 
 -- borders: a two-letter country code for each country and the length of the two countries border in km
 CREATE TABLE Border (
@@ -53,11 +56,11 @@ CREATE TABLE Border (
   country_code_2 CHAR(2),
   border_length  DECIMAL(7, 2),
   PRIMARY KEY (country_code_1, country_code_2),
-  FOREIGN KEY country_code_1 REFERENCES country(country_code),
-  FOREIGN KEY country_code_2 REFERENCES country(country_code),
+  FOREIGN KEY (country_code_1) REFERENCES country(country_code),
+  FOREIGN KEY (country_code_2) REFERENCES country(country_code),
   CONSTRAINT valid_border_length CHECK (border_length >= 0),
   CONSTRAINT border_order CHECK (country_code_1 < country_code_2) -- enforce canonical ordering to prevent (US,CA) and (CA,US) duplicates
-)
+);
 
 -- second, insert data into the tables
 
@@ -212,6 +215,6 @@ INSERT INTO City VALUES
   ('Cherbourg','Normandy','FR', 78000);
 
 -- borders
-INSERT INTO Border (country_code_1, country_code_2, border_length_km) VALUES
+INSERT INTO Border (country_code_1, country_code_2, border_length) VALUES
   ('CA','US', 8891.00),  -- canada-usa
   ('MX','US', 3145.00);  -- mexico-usa
