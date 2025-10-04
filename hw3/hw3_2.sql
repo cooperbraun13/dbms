@@ -3,7 +3,13 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-3, Part 2
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    ... description ....
+ *  DESC:    Contains queries 1–10 over the Country/Province/City/Border 
+ *           schema. Each query is clearly labeled, uses comma joins or 
+ *           JOINs as specified in the instructions, avoids unnecessary 
+ *           tables, and only uses DISTINCT/ORDER BY where required. 
+ *           Threshold values (e.g., high GDP, small area, population 
+ *           cutoffs) were chosen to ensure multiple rows are returned 
+ *           for testing.
  * 
  *======================================================================*/
 
@@ -227,7 +233,7 @@ Purpose: For each province with area < 100000 and country inflation
          province_name, area, total_pop, and avg_pop. Only include 
          provinces with at least 3 cities and total_pop > 1,500,000. Sort 
          by total_pop DESC, then province_name ASC.
-         
+
 -----------------------------------------------------------------------*/
 
 SELECT
