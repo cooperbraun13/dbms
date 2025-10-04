@@ -108,6 +108,7 @@ INSERT INTO City VALUES
   ('Poulsbo','Washington','US',  12562),
   ('Olympia','Washington','US',  55605),
   ('Silverdale','Washington','US',  21046);
+  ('Bremerton', 'Washington','US', 21046);
 
 -- usa: oregon
 INSERT INTO City VALUES
