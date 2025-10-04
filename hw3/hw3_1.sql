@@ -66,56 +66,56 @@ CREATE TABLE Border (
 
 -- 4 countries
 INSERT INTO Country (country_code, name, gdp, inflation) VALUES
-  ('US', 'United States of America', 46900.00, 3.80),
-  ('CA', 'Canada', 42000.00, 2.10),
-  ('MX', 'Mexico', 9600.00,  4.50),
-  ('FR', 'France', 41800.00, 2.80);
+  ('US','United States of America', 46900.00, 3.80),
+  ('CA','Canada', 42000.00, 2.10),
+  ('MX','Mexico', 9600.00,  4.50),
+  ('FR','France', 41800.00, 2.80);
 
 -- provinces: 4 per country
 -- usa
 INSERT INTO Province (province_name, country_code, area) VALUES
-  ('Washington', 'US', 184666),
-  ('Oregon', 'US', 254800),
-  ('California', 'US', 423970),
+  ('Washington','US', 184666),
+  ('Oregon','US', 254800),
+  ('California','US', 423970),
   ('Texas','US', 695662);
 
 -- canada
 INSERT INTO Province (province_name, country_code, area) VALUES
-  ('Ontario', 'CA', 1076395),
-  ('Quebec', 'CA', 1542056),
-  ('British Columbia', 'CA', 944735),
-  ('Alberta', 'CA', 661848);
+  ('Ontario','CA', 1076395),
+  ('Quebec','CA', 1542056),
+  ('British Columbia','CA', 944735),
+  ('Alberta','CA', 661848);
 
 -- mexico
 INSERT INTO Province (province_name, country_code, area) VALUES
-  ('Jalisco', 'MX', 78599),
-  ('Nuevo Leon', 'MX', 64220),
-  ('CDMX', 'MX', 1495),
-  ('Puebla', 'MX', 34306);
+  ('Jalisco','MX', 78599),
+  ('Nuevo Leon','MX', 64220),
+  ('CDMX','MX', 1495),
+  ('Puebla','MX', 34306);
 
 -- france
 INSERT INTO Province (province_name, country_code, area) VALUES
-  ('Ile-de-France', 'FR', 12012),
-  ('Provence', 'FR', 31400),
-  ('Occitanie', 'FR', 72724),
-  ('Normandy', 'FR', 29906);
+  ('Ile-de-France','FR', 12012),
+  ('Provence','FR', 31400),
+  ('Occitanie','FR', 72724),
+  ('Normandy','FR', 29906);
 
 -- cities: 4 per province
 
 -- usa: washington
 INSERT INTO City VALUES
   ('Seattle','Washington','US', 737015),
-  ('Poulsbo','Washington','US',  12562),
-  ('Olympia','Washington','US',  55605),
-  ('Silverdale','Washington','US',  21046);
-  ('Bremerton', 'Washington','US', 21046);
+  ('Poulsbo','Washington','US', 12562),
+  ('Olympia','Washington','US', 55605),
+  ('Silverdale','Washington','US', 21046),
+  ('Bremerton','Washington','US', 21046);
 
 -- usa: oregon
 INSERT INTO City VALUES
-  ('Oswego','Oregon','US', 17047),
-  ('Portland','Oregon','US',  652503),
-  ('Salem','Oregon','US',  180406),
-  ('Eugene','Oregon','US',  178786);
+  ('Oswego', 'Oregon', 'US', 17047),
+  ('Portland', 'Oregon', 'US', 652503),
+  ('Salem', 'Oregon', 'US', 180406),
+  ('Eugene', 'Oregon', 'US', 178786);
 
 -- usa: california
 INSERT INTO City VALUES
