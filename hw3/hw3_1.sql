@@ -199,7 +199,8 @@ INSERT INTO City VALUES
   ('Marseille','Provence','FR', 870000),
   ('Nice','Provence','FR', 340000),
   ('Toulon','Provence','FR', 180000),
-  ('Avignon','Provence','FR', 93000);
+  ('Avignon','Provence','FR', 93000),
+  ('Aix-en-Provence','Provence','FR', 150000);
 
 -- fr: occitanie
 INSERT INTO City VALUES
@@ -218,4 +219,5 @@ INSERT INTO City VALUES
 -- borders
 INSERT INTO Border (country_code_1, country_code_2, border_length) VALUES
   ('CA','US', 8891.00),  -- canada-usa
-  ('MX','US', 3145.00);  -- mexico-usa
+  ('MX','US', 3145.00),  -- mexico-usa
+  ('CA','MX', 2500.00);  -- fake data
