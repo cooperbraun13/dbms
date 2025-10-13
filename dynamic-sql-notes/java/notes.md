@@ -15,7 +15,6 @@
 ### Java and JDBC: A Simple Example
 
 ```java
-//
 import java.sql.*;
 import java.util.Properties;
 
