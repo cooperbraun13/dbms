@@ -11,19 +11,22 @@
 DROP VIEW IF EXISTS country_city CASCADE;
 
 /*======================================================================
- * (1) country_city view to flatten country and city info for easier 
- *     querying.
+ * (1) flattens country and city info for easier querying.
  *     other: Country.name is aliased as country_name to match the
  *            required schema.
  *======================================================================*/
 
 CREATE VIEW country_city AS
-  SELECT c.country_code, c.name AS country_name, ci.city_name, ci.population
+  SELECT 
+    c.country_code, 
+    c.name AS country_name, 
+    ci.city_name, 
+    ci.population
   FROM Country c JOIN City ci ON ci.country_code = c.country_code;
 
 /*======================================================================
  * (2) finds countries having >= 2 cities with population > threshold.
- *     other: threshold set to 500,000
+ *     other: threshold set to 500,000.
  *======================================================================*/
 
 SELECT DISTINCT c1.country_code, c1.country_name, c.gdp, c.inflation
@@ -35,7 +38,28 @@ JOIN country c ON c.country_code = c1.country_code
 ORDER BY c.gdp DESC, c.inflation ASC;
 
 /*======================================================================
- * (3) 
- *     other: threshold set to 500,000
+ * (3) duplicates each border in reverse order so both directions
+ *     appear. removes the ordering constraint
+ *     (country_code_1 < country_code_2) from the base table.
+ *     other: uses union to avoid duplicates.
  *======================================================================*/
 
+CREATE VIEW border_full AS
+  SELECT 
+    b.country_code_1 AS country_code_1, 
+    b.country_code_2 AS country_code_2, 
+    b.border_length AS border_length
+  FROM border b
+  UNION
+  SELECT
+    b.country_code_2 AS country_code_1, 
+    b.country_code_1 AS country_code_2, 
+    b.border_length AS border_length
+  FROM border b;
+
+/*======================================================================
+ * (4) duplicates each border in reverse order so both directions
+ *     appear. removes the ordering constraint
+ *     (country_code_1 < country_code_2) from the base table.
+ *     other: uses union to avoid duplicates.
+ *======================================================================*/
