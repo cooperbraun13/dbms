@@ -58,8 +58,16 @@ CREATE VIEW border_full AS
   FROM border b;
 
 /*======================================================================
- * (4) duplicates each border in reverse order so both directions
- *     appear. removes the ordering constraint
- *     (country_code_1 < country_code_2) from the base table.
- *     other: uses union to avoid duplicates.
+ * (4) finds countries with high gdp/low inflation that share a border
+ *     with low gdp/high inflation neighbors.
+ *     other: i used the CA <-> MX sample in my data
  *======================================================================*/
+
+ SELECT DISTINCT c.country_code, c.name AS country_name
+ FROM country c 
+  JOIN border_full bf ON bf.country_code_1 = c.country_code
+  JOIN country n ON n.country_code = bf.country_code_2
+WHERE c.gdp       >= 40000 
+  AND c.inflation <= 3.0
+  AND n.gdp       <= 10000
+  AND n.inflation >= 4.0;
