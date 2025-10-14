@@ -3,12 +3,15 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-4, Part 1
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    ... description ....
+ *  DESC:    Views and queries for HW-4. Includes the country_city view, 
+ *           countries with >= 2 large cities, symmetric border view, 
+ *           high/low neighbors, and highest-inflation query.
  * 
  *======================================================================*/
 
 -- start clean each run
 DROP VIEW IF EXISTS country_city CASCADE;
+DROP VIEW IF EXISTS border_full  CASCADE;
 
 /*======================================================================
  * (1) flattens country and city info for easier querying.
@@ -75,7 +78,7 @@ WHERE c.gdp       >= 40000
 /*======================================================================
  * (5) returns all countries whose inflation is maximal among all
  *     countries.
- *     other: uses NOT EXISTS because if their is a country with higher
+ *     other: uses NOT EXISTS because if there is a country with higher
  *     inflation, then the condition fails and that country is not
  *     returned.
  *======================================================================*/
