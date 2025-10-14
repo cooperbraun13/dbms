@@ -22,7 +22,7 @@ CREATE VIEW country_city AS
     c.name AS country_name, 
     ci.city_name, 
     ci.population
-  FROM Country c JOIN City ci ON ci.country_code = c.country_code;
+  FROM country c JOIN city ci ON ci.country_code = c.country_code;
 
 /*======================================================================
  * (2) finds countries having >= 2 cities with population > threshold.
@@ -63,11 +63,27 @@ CREATE VIEW border_full AS
  *     other: i used the CA <-> MX sample in my data
  *======================================================================*/
 
- SELECT DISTINCT c.country_code, c.name AS country_name
- FROM country c 
+SELECT DISTINCT c.country_code, c.name AS country_name
+FROM country c 
   JOIN border_full bf ON bf.country_code_1 = c.country_code
   JOIN country n ON n.country_code = bf.country_code_2
 WHERE c.gdp       >= 40000 
   AND c.inflation <= 3.0
   AND n.gdp       <= 10000
   AND n.inflation >= 4.0;
+
+/*======================================================================
+ * (5) returns all countries whose inflation is maximal among all
+ *     countries.
+ *     other: uses NOT EXISTS because if their is a country with higher
+ *     inflation, then the condition fails and that country is not
+ *     returned.
+ *======================================================================*/
+
+SELECT c1.country_code, c1.name AS country_name, c1.inflation
+FROM country c1
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM country c2
+  WHERE c2.inflation > c1.inflation
+);
