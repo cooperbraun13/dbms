@@ -53,11 +53,11 @@ def q3(cn, rs):
   length = input("Border length...: ")
   
   # enforce canonical order to satisfy: CHECK (country_code_1 < country_code_2)
-  a, b = (code1, code2) if code1 < code2 else (code2, code1)
+  codea, codeb = (code1, code2) if code1 < code2 else (code2, code1)
   
   # check if border already exists (in either order)
   q_check = "SELECT country_code_1, country_code_2 FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
-  rs.execute(q_check, (code1, code2))
+  rs.execute(q_check, (codea, codeb))
   
   exists = False
   for row in rs:
@@ -66,15 +66,16 @@ def q3(cn, rs):
       break
     
   if exists:
-    print(f"Border between {code1} and {code2} already exists.\n")
+    print(f"Border between {codea} and {codeb} already exists.\n")
+    return
     
   # insert new border
   q_insert = "INSERT INTO border (country_code_1, country_code_2, border_length) VALUES (%s, %s, %s);"
-  rs.execute(q_insert, (code1, code2, length))
+  rs.execute(q_insert, (codea, codeb, length))
   cn.commit()
 
 def q4(rs):
-  # promp user for inputs
+  # prompt user for inputs
   min_gdp = input("Minimum per capita gdp (USD)..: ")
   max_gdp = input("Maximum per capita gdp (USD)..: ")
   min_infl = input("Minimum inflation (pct).......: ")
@@ -110,6 +111,7 @@ def q5(cn, rs):
     
   if not exists:
     print(f"Country '{code}' does not exist.\n")
+    return
     
   # update gdp and inflation
   q_insert = "UPDATE country SET gdp = %s, inflation = %s WHERE country_code = %s;"
@@ -117,15 +119,16 @@ def q5(cn, rs):
   cn.commit()
 
 def q6(cn, rs):
+  # prompt for user inputs
   code1 = input("Country code 1..: ")
   code2 = input("Country code 2..: ")
   
   # enforce canonical order to satisfy: CHECK (country_code_1 < country_code_2)
-  a, b = (code1, code2) if code1 < code2 else (code2, code1)
+  codea, codeb = (code1, code2) if code1 < code2 else (code2, code1)
   
   # check border exists
   q_check = "SELECT 1 FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
-  rs.execute(q_check, (code1, code2))
+  rs.execute(q_check, (codea, codeb))
   exists = False
   for row in rs:
     if row:
@@ -133,12 +136,12 @@ def q6(cn, rs):
       break
     
   if not exists:
-    print(f"Border between {code1} and {code2} does not exist.\n")
+    print(f"Border between {codea} and {codeb} does not exist.\n")
     return
   
   # remove border
   q_remove = "DELETE FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
-  rs.execute(q_remove, (code1, code2))
+  rs.execute(q_remove, (codea, codeb))
   cn.commit()
 
 # main loop
@@ -175,7 +178,7 @@ def main():
       elif choice == "5":
         q5(cn, rs)
       elif choice == "6":
-        q6(rs)
+        q6(cn, rs)
       elif choice == "7":
         break
       else:
