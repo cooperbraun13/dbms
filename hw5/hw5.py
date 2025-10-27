@@ -92,8 +92,28 @@ def q4(rs):
     print(f"{row[0]} ({row[1]}), per capita gdp ${row[2]}, inflation rate {row[3]}%")
   print()
 
-def q5(rs):
-  pass
+def q5(cn, rs):
+  # prompt user for inputs
+  code = input("Country code..................: ")
+  gdp = input("Country per capita gdp (USD)..: ")
+  infl = input("Country inflation (pct).......: ")
+  
+  # check to see if country exists
+  q_check = "SELECT country_code FROM country WHERE country_code = %s;"
+  rs.execute(q_check, (code,))
+  exists = False
+  for row in rs:
+    if row:
+      exists = True
+      break
+    
+  if not exists:
+    print(f"Country '{code}' does not exist.\n")
+    
+  # update gdp and inflation
+  q_insert = "UPDATE country SET gdp = %s, inflation = %s WHERE country_code = %s;"
+  rs.execute(q_insert, (gdp, infl, code))
+  cn.commit()
 
 def q6(rs):
   pass
@@ -130,7 +150,7 @@ def main():
       elif choice == "4":
         q4(rs)
       elif choice == "5":
-        q5(rs)
+        q5(cn, rs)
       elif choice == "6":
         q6(rs)
       elif choice == "7":

@@ -69,7 +69,8 @@ INSERT INTO Country (country_code, name, gdp, inflation) VALUES
   ('US','United States of America', 46900.00, 3.80),
   ('CA','Canada', 42000.00, 2.10),
   ('MX','Mexico', 9600.00,  4.50),
-  ('FR','France', 41800.00, 2.80);
+  ('FR','France', 41800.00, 2.80),
+  ('JP','Japan', 46900.00, 2.70);
 
 -- provinces: 4 per country
 -- usa
