@@ -10,7 +10,13 @@ import psycopg as pg
 from config import HOST, USER, PASSWORD, DATABASE
 
 def q1(rs):
-  pass
+  q = "SELECT name, country_code, gdp, inflation FROM country ORDER BY name;"
+  # no parameters needed
+  rs.execute(q)
+  for name, code, gdp, infl in rs:
+    # format -> name (code), per capita gdp $gdp, inflation rate inflation%
+    print(f"{name} ({code}), per capita gdp ${gdp}, inflation rate {infl}%")
+  print()
 
 def q2(rs):
   pass
@@ -41,39 +47,38 @@ def main():
   cn = pg.connect(host=hst, user=usr, password=pwd, dbname=dat)
   rs = cn.cursor()
   
-  
-  while True:
-    print("1. List countries")
-    print("2. Add country")
-    print("3. Add border")
-    print("4. Find countries based on gdp and inflation")
-    print("5. Update country's gdp and inflation")
-    print("6. Remove border")
-    print("7. Exit")
+  try:
+    while True:
+      print("1. List countries")
+      print("2. Add country")
+      print("3. Add border")
+      print("4. Find countries based on gdp and inflation")
+      print("5. Update country's gdp and inflation")
+      print("6. Remove border")
+      print("7. Exit")
 
-    choice = input("Enter your choice (1-7): ")
-    
-    if choice == "0":
-      break
-    elif choice == "1":
-      q1(rs)
-    elif choice == "2":
-      q2(rs)
-    elif choice == "3":
-      q3(rs)
-    elif choice == "4":
-      q4(rs)
-    elif choice == "5":
-      q5(rs)
-    elif choice == "6":
-      q6(rs)
-    elif choice == "7":
-      q7(rs)
-    else:
-      print("Invalid choice.")
+      choice = input("Enter your choice (1-7): ")
+      
+      if choice == "1":
+        q1(rs)
+      elif choice == "2":
+        q2(rs)
+      elif choice == "3":
+        q3(rs)
+      elif choice == "4":
+        q4(rs)
+      elif choice == "5":
+        q5(rs)
+      elif choice == "6":
+        q6(rs)
+      elif choice == "7":
+        q7(rs)
+      else:
+        print("Invalid choice.")
   
-  rs.close()
-  cn.close()
+  finally:
+    rs.close()
+    cn.close()
   
 if __name__ == "__main__":
   main()
