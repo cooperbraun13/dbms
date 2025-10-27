@@ -45,8 +45,32 @@ def q2(cn, rs):
   rs.execute(q_insert, (code, name, gdp, infl))
   cn.commit()
 
-def q3(rs):
-  pass
+def q3(cn, rs):
+  # prompt user for inputs
+  code1 = input("Country code 1..: ")
+  code2 = input("Country code 2..: ")
+  length = input("Border length...: ")
+  
+  # enforce canonical order to satisfy: CHECK (country_code_1 < country_code_2)
+  a, b = (code1, code2) if code1 < code2 else (code2, code1)
+  
+  # check if border already exists (in either order)
+  q_check = "SELECT country_code_1, country_code_2 FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
+  rs.execute(q_check, (code1, code2))
+  
+  exists = False
+  for row in rs:
+    if row:
+      exists = True
+      break
+    
+  if exists:
+    print(f"Border between {code1} and {code2} already exists.\n")
+    
+  # insert new border
+  q_insert = "INSERT INTO border (country_code_1, country_code_2, border_length) VALUES (%s, %s, %s);"
+  rs.execute(q_insert, (code1, code2, length))
+  cn.commit()
 
 def q4(rs):
   pass
@@ -86,9 +110,9 @@ def main():
       if choice == "1":
         q1(rs)
       elif choice == "2":
-        q2(rs)
+        q2(cn, rs)
       elif choice == "3":
-        q3(rs)
+        q3(cn, rs)
       elif choice == "4":
         q4(rs)
       elif choice == "5":
