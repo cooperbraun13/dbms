@@ -13,6 +13,7 @@ def q1(rs):
   q = "SELECT name, country_code, gdp, inflation FROM country ORDER BY name;"
   # no parameters needed
   rs.execute(q)
+  
   for name, code, gdp, infl in rs:
     # format -> name (code), per capita gdp $gdp, inflation rate inflation%
     print(f"{name} ({code}), per capita gdp ${gdp}, inflation rate {infl}%")
@@ -115,8 +116,30 @@ def q5(cn, rs):
   rs.execute(q_insert, (gdp, infl, code))
   cn.commit()
 
-def q6(rs):
-  pass
+def q6(cn, rs):
+  code1 = input("Country code 1..: ")
+  code2 = input("Country code 2..: ")
+  
+  # enforce canonical order to satisfy: CHECK (country_code_1 < country_code_2)
+  a, b = (code1, code2) if code1 < code2 else (code2, code1)
+  
+  # check border exists
+  q_check = "SELECT 1 FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
+  rs.execute(q_check, (code1, code2))
+  exists = False
+  for row in rs:
+    if row:
+      exists = True
+      break
+    
+  if not exists:
+    print(f"Border between {code1} and {code2} does not exist.\n")
+    return
+  
+  # remove border
+  q_remove = "DELETE FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
+  rs.execute(q_remove, (code1, code2))
+  cn.commit()
 
 # main loop
 def main():
