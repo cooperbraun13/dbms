@@ -73,15 +73,29 @@ def q3(cn, rs):
   cn.commit()
 
 def q4(rs):
-  pass
+  # promp user for inputs
+  min_gdp = input("Minimum per capita gdp (USD)..: ")
+  max_gdp = input("Maximum per capita gdp (USD)..: ")
+  min_infl = input("Minimum inflation (pct).......: ")
+  max_infl = input("Maximum inflation (pct).......: ")
+  
+  q = """
+  SELECT name, country_code, gdp, inflation 
+  FROM country 
+  WHERE gdp BETWEEN %s AND %s 
+    AND inflation BETWEEN %s AND %s 
+  ORDER BY gdp DESC, inflation ASC;
+  """
+  rs.execute(q, (min_gdp, max_gdp, min_infl, max_infl))
+  
+  for row in rs:
+    print(f"{row[0]} ({row[1]}), per capita gdp ${row[2]}, inflation rate {row[3]}%")
+  print()
 
 def q5(rs):
   pass
 
 def q6(rs):
-  pass
-
-def q7(rs):
   pass
 
 # main loop
@@ -120,7 +134,7 @@ def main():
       elif choice == "6":
         q6(rs)
       elif choice == "7":
-        q7(rs)
+        break
       else:
         print("Invalid choice.")
   
