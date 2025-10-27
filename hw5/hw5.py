@@ -52,8 +52,37 @@ def q3(cn, rs):
   code2 = input("Country code 2..: ")
   length = input("Border length...: ")
   
+  if code1 == code2:
+    print("A country cannot border itself.\n")
+    return
+  
   # enforce canonical order to satisfy: CHECK (country_code_1 < country_code_2)
   codea, codeb = (code1, code2) if code1 < code2 else (code2, code1)
+  
+  # check both countries exist
+  q_exists = "SELECT country_code FROM country WHERE country_code = %s;"
+  rs.execute(q_exists, (codea,))
+  a_exists = False
+  for row in rs:
+    if row:
+      a_exists = True
+      break
+
+  rs.execute(q_exists, (codeb,))
+  b_exists = False
+  for row in rs:
+    if row:
+      b_exists = True
+      break
+
+  if not a_exists or not b_exists:
+    if not a_exists and not b_exists:
+      print(f"Countries '{codea}' and '{codeb}' do not exist.\n")
+    elif not a_exists:
+      print(f"Country '{codea}' does not exist.\n")
+    else:
+      print(f"Country '{codeb}' does not exist.\n")
+    return
   
   # check if border already exists (in either order)
   q_check = "SELECT country_code_1, country_code_2 FROM border WHERE country_code_1 = %s AND country_code_2 = %s;"
@@ -180,6 +209,7 @@ def main():
       elif choice == "6":
         q6(cn, rs)
       elif choice == "7":
+        print("Exiting program...")
         break
       else:
         print("Invalid choice.")
