@@ -18,8 +18,32 @@ def q1(rs):
     print(f"{name} ({code}), per capita gdp ${gdp}, inflation rate {infl}%")
   print()
 
-def q2(rs):
-  pass
+def q2(cn, rs):
+  # prompt user for inputs
+  code = input("Country code..................: ")
+  name = input("Country name..................: ")
+  gdp = input("Country per capita gdp (USD)..: ")
+  infl = input("Country inflation (pct).......: ")
+  
+  # check if the country code already exists
+  q_check = "SELECT 1 FROM country WHERE country_code = %s;"
+  rs.execute(q_check, (code,))
+  
+  # loops through result set to see if country already exists
+  exists = False
+  for row in rs:
+    if row:
+      exists = True
+      break
+  
+  if exists:
+    print(f"Country '{code}' already exists.\n")
+    return
+
+  # insert new country
+  q_insert = "INSERT INTO country (country_code, name, gdp, inflation) VALUES (%s, %s, %s, %s);"
+  rs.execute(q_insert, (code, name, gdp, infl))
+  cn.commit()
 
 def q3(rs):
   pass
