@@ -3,11 +3,9 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-8
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    
+ *  DESC:    SQL aggregation queries on the world database using
+ *           JOIN, GROUP BY, and HAVING.
  *           
- *           
- *           
- * 
  *======================================================================*/
 
 /* 

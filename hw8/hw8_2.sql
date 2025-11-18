@@ -3,11 +3,9 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-8
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    
+ *  DESC:    Aggregate queries on the DVD rental database using
+ *           joins, GROUP BY, and HAVING.
  *           
- *           
- *           
- * 
  *======================================================================*/
 
 /* 
@@ -124,4 +122,4 @@ HAVING COUNT(*) >= 5
 ORDER BY
   num_sports_films DESC,
   a.last_name,
-  a.first_name
+  a.first_name;
