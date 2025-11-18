@@ -45,7 +45,7 @@ ORDER BY co.country_code;
 */
 
 SELECT
-  co.country_code
+  co.country_code,
   co.name,
   co.gdp,
   co.inflation,
@@ -74,7 +74,7 @@ JOIN City AS ci ON co.country_code = ci.country_code
 GROUP BY
   co.country_code,
   co.name
-ORDER BY num_cities DESC, -- most to fewest cities
+ORDER BY num_cities DESC; -- most to fewest cities
 
 /* 
 (5) Purpose: Order countries by the number of cities they contain, restricted to countries that have a total
@@ -90,17 +90,17 @@ ORDER BY num_cities DESC, -- most to fewest cities
 SELECT
   co.country_code,
   co.gdp,
-  SUM(DISTINCT p.area) AS total_area,
+  SUM(DISTINCT pr.area) AS total_area,
   COUNT(ci.city_name) AS num_cities
 FROM Country as co 
 JOIN Province AS pr on co.country_code = pr.country_code 
 JOIN City as ci ON ci.province_name = pr.province_name AND ci.country_code = pr.country_code
 GROUP BY
   co.country_code,
-  co.gdp,
+  co.gdp
 HAVING
-  SUM(DISTINCT p.area) < 4500000 -- "small" country total area
+  SUM(DISTINCT pr.area) < 4500000 -- "small" country total area
   AND co.gdp > 20000             -- "large" GDP
 ORDER BY
   num_cities ASC, -- fewest to most cities
-  c.gdp DESC,     -- for ties, largest GDP first
+  co.gdp DESC;    -- for ties, largest GDP first
