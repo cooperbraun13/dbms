@@ -27,7 +27,7 @@ SELECT f1.film_id, f1.title, f1.length
 FROM film f1
 WHERE f1.rating = 'PG-13'
   AND f1.length = (SELECT MAX(f2.length)
-                   FROM film f2)
+                   FROM film f2
                    WHERE f2.rating = 'PG-13');
 
 /*
@@ -84,7 +84,7 @@ HAVING COUNT(*) >= ALL (SELECT COUNT(*)
 /*
 (6) Purpose: Find the 'PG' rated film(s) that have been rented more than the average amount of times (for 'PG' rated
              movies). Return the film titles and the number of times each film has been rented. Ordered from most
-             number of rentals to least
+             number of rentals to least. Limited to 10 results for screenshot purposes.
 */
 
 SELECT fi.title, COUNT(re.rental_id) AS num_rentals
@@ -102,7 +102,8 @@ HAVING COUNT(re.rental_id) > (SELECT AVG(pg_counts.num_rentals)
                                 WHERE fi2.rating = 'PG'
                                 GROUP BY fi2.film_id
                               ) pg_counts)
-ORDER BY num_rentals DESC;
+ORDER BY num_rentals DESC
+LIMIT 10;
 
 /*
 (7) Purpose: Find the actors that have not acted in a 'PG' rated movie. Return each actors actor id, first name, and last name.
@@ -119,6 +120,7 @@ WHERE ac.actor_id NOT IN (
 
 /*
 (8) Purpose: Find the movies that are in all of the store's inventories. Return each matching film id and film title.
+             Limited to 10 results for screenshot purposes.
 */
 
 SELECT fi.film_id, fi.title
@@ -132,4 +134,5 @@ WHERE NOT EXISTS (
     WHERE iv.store_id = st.store_id
       AND iv.film_id = fi.film_id
   )
-);
+)
+LIMIT 10;
