@@ -3,7 +3,9 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-9
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    
+ *  DESC:    Eight SQL queries that demonstrate the use of joins, grouping, 
+ *           aggregate functions, subqueries, and set logic to retrieve specific 
+ *           information from the CPSC321 DVD rental database.
  *           
  *======================================================================*/
 
