@@ -3,7 +3,9 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-10
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    
+ *  DESC:    Queries that demonstrate the use of OUTER JOINs,
+ *           CASE statements for derived columns, window functions for
+ *           ranking, and a CTE with UNION to combine film update data.
  *           
  *======================================================================*/
 
@@ -86,3 +88,4 @@ JOIN film_category fc ON fi.film_id = fc.film_id
 JOIN category ca ON fc.category_id = ca.category_id
 WHERE ca.name = 'Action'
 ORDER BY fi.title, fu.last_update
+LIMIT 10;

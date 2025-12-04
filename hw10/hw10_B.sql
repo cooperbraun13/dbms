@@ -3,7 +3,9 @@
  *  NAME:    Cooper Braun
  *  ASSIGN:  HW-10
  *  COURSE:  CPSC 321, Fall 2025
- *  DESC:    
+ *  DESC:    Creates example tables and uses recursive CTEs to compute
+ *           ancestor paths in a family tree and shortest flight routes
+ *           (including ties) between cities.
  *           
  *======================================================================*/
 
@@ -16,7 +18,7 @@
 DROP TABLE IF EXISTS parent_child;
 
 CREATE TABLE parent_child (
-  parent_name VARCHAR
+  parent_name VARCHAR,
   child_name VARCHAR
 );
 
@@ -50,7 +52,7 @@ WITH RECURSIVE ancestors AS (
     an.dist + 1 AS dist,
     pc.parent_name || ' <- ' || an.path AS path
   FROM parent_child pc
-  JOIN ancestors an ON pc.child_name = an.child_name
+  JOIN ancestors an ON pc.child_name = an.ancestor
 )
 SELECT ancestor, descendant, dist, path
 FROM ancestors
@@ -82,7 +84,7 @@ INSERT INTO flight (flight_start, flight_end, flight_dist) VALUES
 ('SEA', 'DEN', 1311),
 ('GEG', 'DEN', 649),
 ('PDX', 'SLC', 766),
-('BOI', 'DEN', 400)
+('BOI', 'DEN', 400);
 
 -- recursive CTE to generate all routes and their distances + path
 WITH RECURSIVE full_route (
@@ -95,7 +97,7 @@ WITH RECURSIVE full_route (
   SELECT
     flight_start,
     flight_end,
-    flight_dist
+    flight_dist,
     flight_start || ' -> ' || flight_end AS detailed_path
   FROM flight
   UNION ALL
