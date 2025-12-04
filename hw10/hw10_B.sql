@@ -63,15 +63,15 @@ ORDER BY descendant, dist, ancestor;
              and use a recursive CTE to find all shortest-distance routes (with ties) between each pair of cities
 */
 
-DROP TABLE IF EXISTS flight;
+DROP TABLE IF EXISTS hw10_flight;
 
-CREATE TABLE flight (
+CREATE TABLE hw10_flight (
   flight_start VARCHAR,
   flight_end VARCHAR,
   flight_dist INTEGER
 );
 
-INSERT INTO flight (flight_start, flight_end, flight_dist) VALUES
+INSERT INTO hw10_flight (flight_start, flight_end, flight_dist) VALUES
 ('SEA', 'GEG', 224),
 ('SEA', 'PDX', 129),
 ('GEG', 'PDX', 279),
@@ -99,7 +99,7 @@ WITH RECURSIVE full_route (
     flight_end,
     flight_dist,
     flight_start || ' -> ' || flight_end AS detailed_path
-  FROM flight
+  FROM hw10_flight
   UNION ALL
   -- recursive step: extend an existing route with one more flight
   SELECT 
@@ -107,7 +107,7 @@ WITH RECURSIVE full_route (
     r.route_end,
     f.flight_dist + r.route_dist,
     f.flight_start || ' -> ' || r.detailed_path
-  FROM flight f
+  FROM hw10_flight f
   JOIN full_route r ON f.flight_end = r.route_start
 ),
 
